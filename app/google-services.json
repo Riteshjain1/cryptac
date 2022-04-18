@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "141148642436",
+    "project_id": "cryptac",
+    "storage_bucket": "cryptac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:141148642436:android:2fcc97850a1cfb638636d1",
+        "android_client_info": {
+          "package_name": "com.example.cryptac"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "141148642436-avcjoteu6o7le8vrid2of97knqiuj7qh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cryptac",
+            "certificate_hash": "436557d393c37469f8aa59d4cc67dec5bc0a4820"
+          }
+        },
+        {
+          "client_id": "141148642436-g2lsku7j48q3qd4l7no7sp6pcdqbl8lo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTZylDvWsp11QWCn9KUuCK9o1A5V4wVeE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "141148642436-g2lsku7j48q3qd4l7no7sp6pcdqbl8lo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
