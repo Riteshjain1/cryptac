@@ -24,17 +24,17 @@ public class SettingsActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch(item.getItemId()){
                     case R.id.page_1:
-                        Intent intent = new Intent(getApplicationContext(), CalculateActivity.class);
-                        startActivity(intent);
-                        break;
+                        startActivity(new Intent(getApplicationContext(), CalculateActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
                     case R.id.page_2:
-                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(i);
-                        break;
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
                     case R.id.page_3:
-                        break;
+                        return true;
                 }
-                return true;
+                return false;
             }
         });
     }

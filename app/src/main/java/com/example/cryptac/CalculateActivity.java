@@ -23,17 +23,17 @@ public class CalculateActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch(item.getItemId()){
                     case R.id.page_1:
-                        break;
+                        return true;
                     case R.id.page_2:
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(intent);
-                        break;
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
                     case R.id.page_3:
-                        Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
-                        startActivity(i);
-                        break;
+                        startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
                 }
-                return true;
+                return false;
             }
         });
     }
