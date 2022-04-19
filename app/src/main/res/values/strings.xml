@@ -10,12 +10,4 @@
     <string name="didnt_receive_otp">Didn\'t Recieve the OTP?</string>
     <string name="resend_otp">RESEND OTP</string>
     <string name="verify">Verify</string>
-    <string-array name="coins">
-        <item>Click Here</item>
-        <item>BTC</item>
-        <item>ETH</item>
-        <item>MATIC</item>
-        <item>XRP</item>
-        <item>CDX</item>
-    </string-array>
 </resources>
