@@ -30,12 +30,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        List<Data> data = fill_with_data();
-
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        RecyclerView_Adapter adapter = new RecyclerView_Adapter(data, getApplication());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         btn = findViewById(R.id.btn);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -67,14 +61,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-    public List<Data> fill_with_data() {
-
-        List<Data> data = new ArrayList<>();
-        data.add(new Data("BTC", R.drawable.btc));
-        data.add(new Data("ETH", R.drawable.eth));
-        data.add(new Data("MATIC", R.drawable.polygon));
-        return data;
     }
 }

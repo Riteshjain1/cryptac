@@ -84,6 +84,7 @@ public class verifyOTPActivity extends AppCompatActivity {
                                         SharedPreferences sharedPreferences = getSharedPreferences(verifyOTPActivity.PREFS_NAME,0);
                                         SharedPreferences.Editor editor = sharedPreferences.edit();
                                         editor.putBoolean("hasLoggedIn",true);
+                                        editor.putString("mobile",getIntent().getStringExtra("mobile"));
                                         editor.apply();
                                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
