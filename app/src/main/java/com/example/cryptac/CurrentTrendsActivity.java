@@ -37,9 +37,13 @@ public class CurrentTrendsActivity extends AppCompatActivity{
     private Button btn;
     private SearchableSpinner searchableSpinner1;
     private SearchableSpinner searchableSpinner2;
+    private ArrayList<String> coinSymbols = new ArrayList<String>();
     private ArrayList<String> coins = new ArrayList<String>();
     private ArrayList<String> currency = new ArrayList<String>();
     private ImageButton backButton;
+    private String setCoinSym;
+    private String setCoin;
+    private String setCurrency;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,16 +51,31 @@ public class CurrentTrendsActivity extends AppCompatActivity{
         setContentView(R.layout.activity_current_trends);
 
         //spinner 1
-        coins.add("Search Cryptocurrencies");
+        coins.add("");
+        coinSymbols.add("Search Cryptocurrencies");
         populateCoins();
-        while(coins.size() == 1){};
+        while(coinSymbols.size() == 1){};
         searchableSpinner1 = findViewById(R.id.spinner1);
         ArrayAdapter<String> sp1ArrayAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_spinner_dropdown_item,
-                coins);
+                coinSymbols);
         searchableSpinner1.setAdapter(sp1ArrayAdapter);
         searchableSpinner1 = findViewById(R.id.spinner1);
+        searchableSpinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                if(pos != 0){
+                    setCoinSym = coinSymbols.get(pos);
+                    setCoin = coins.get(pos);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         //spinner 2
         currency.add("Search currencies");
@@ -70,6 +89,19 @@ public class CurrentTrendsActivity extends AppCompatActivity{
                 android.R.layout.simple_spinner_dropdown_item,
                 currency);
         searchableSpinner2.setAdapter(sp2ArrayAdapter);
+        searchableSpinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long l) {
+                if(pos != 0){
+                    setCurrency = currency.get(pos);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         //button code here
         btn = findViewById(R.id.btn);
@@ -77,6 +109,9 @@ public class CurrentTrendsActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), RedirectionPage.class);
+                intent.putExtra("coin",setCoin);
+                intent.putExtra("currency", setCurrency);
+                intent.putExtra("coinSymbol",setCoinSym);
                 startActivity(intent);
             }
         });
@@ -116,7 +151,9 @@ public class CurrentTrendsActivity extends AppCompatActivity{
                         int i;
                         for(i = 0; i<arr.length(); i++){
                             String coin_sym = arr.getJSONObject(i).getString("symbol");
-                            coins.add(coin_sym);
+                            String coin = arr.getJSONObject(i).getString("id");
+                            coins.add(coin);
+                            coinSymbols.add(coin_sym);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
