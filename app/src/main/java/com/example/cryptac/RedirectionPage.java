@@ -34,10 +34,12 @@ public class RedirectionPage extends AppCompatActivity {
     private TextView co;
     private TextView curr;
     private ImageButton btn;
+    private String coin;
     double points[] = new double[364];
     private GraphView graphView;
     String currency = "";
     float val = 0;
+    float currVal = 0;
 
 
     @Override
@@ -59,7 +61,7 @@ public class RedirectionPage extends AppCompatActivity {
 
         txt = findViewById(R.id.txt);
 
-        String coin = intent.getStringExtra("coin");
+        coin = intent.getStringExtra("coin");
         String currencySym = intent.getStringExtra("currencySym");
         String coinSymbol = intent.getStringExtra("coinSymbol");
         currency = intent.getStringExtra("currency");
@@ -68,7 +70,12 @@ public class RedirectionPage extends AppCompatActivity {
         curr.setText(currencySym);
         try {
             getEqualUSD();
-            Thread.sleep(300);
+            Thread.sleep(200);
+        }catch(Exception e){
+        }
+        try {
+            getCurrentVal();
+            Thread.sleep(200);
         }catch(Exception e){
         }
         OkHttpClient client = new OkHttpClient().newBuilder().build();
@@ -97,24 +104,22 @@ public class RedirectionPage extends AppCompatActivity {
                         RedirectionPage.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                txt.setText("Current value is: "+String.valueOf(currVal/val));
+                                graphView = findViewById(R.id.idGraphView);
+                                DataPoint[] pts = new DataPoint[arr.length()];
 
+                                for(int i = 0; i < arr.length(); i++){
+                                    pts[i] = new DataPoint(i, points[i]);
+                                }
+
+                                LineGraphSeries<DataPoint> series = new LineGraphSeries<>(pts);
+
+                                graphView.setTitle("");
+                                graphView.setTitleColor(R.color.colorPrimary);
+                                graphView.setTitleTextSize(15);
+                                graphView.addSeries(series);
                             }
                         });
-
-                        txt.setText("Current value is: "+String.valueOf(points[arr.length()-1]));
-                        graphView = findViewById(R.id.idGraphView);
-                        DataPoint[] pts = new DataPoint[arr.length()];
-
-                        for(int i = 0; i < arr.length(); i++){
-                            pts[i] = new DataPoint(i, points[i]);
-                        }
-
-                        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(pts);
-
-                        graphView.setTitle("");
-                        graphView.setTitleColor(R.color.colorPrimary);
-                        graphView.setTitleTextSize(15);
-                        graphView.addSeries(series);
 
 
                     } catch (JSONException e) {
@@ -156,5 +161,35 @@ public class RedirectionPage extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void getCurrentVal(){
+        String url = "https://api.coincap.io/v2/assets/"+coin;
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                final String myResponse = response.body().string();
+                JSONObject obj = null;
+                try {
+                    obj = new JSONObject(myResponse);
+                    JSONObject myData = obj.getJSONObject("data");
+                    String  price = myData.getString("priceUsd");
+                    currVal = Float.parseFloat(price);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 }

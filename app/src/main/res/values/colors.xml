@@ -9,4 +9,5 @@
     <color name="colorTextSecondary">#757575</color>
     <color name="colorDivider">#cacaca</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorRed">#F44330</color>
 </resources>

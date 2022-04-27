@@ -42,6 +42,8 @@ class item{
 }
 
 public class MainActivity extends AppCompatActivity {
+    String currencySym = "USD";
+    String currency = "united-states-dollar";
     item topGain, topLoss;
     ArrayList<item> a = new ArrayList<>(); //arraylist of all items
     String url1 = "https://www.cryptologos.cc/logos/";
@@ -86,18 +88,46 @@ public class MainActivity extends AppCompatActivity {
         String str = topGain.ID+"-" + topGain.sym.toLowerCase();
         TextView coinNA = findViewById(R.id.coinNameA);
         TextView coinVA = findViewById(R.id.coinValueA);
+        TextView percentGain = findViewById(R.id.percentGain);
         ImageView imageView = findViewById(R.id.imageViewA);
         Picasso.get().load(url1+str+url2).placeholder(R.drawable.ic_baseline_image_24).resize(200, 200)
                 .centerCrop().into(imageView);
-        coinNA.setText(topGain.sym); coinVA.setText("$" + topGain.value);
+        String gainpercent = String.valueOf(Math.round(topGain.percent*100.0)/100.0);
+        coinNA.setText(topGain.sym); coinVA.setText("$" + topGain.value); percentGain.setText("▲ " + gainpercent + "%");
+        CardView cA = findViewById(R.id.cardgain);
+        cA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), RedirectionPage.class);
+                intent.putExtra("coin", topGain.ID);
+                intent.putExtra("currencySym", currencySym);
+                intent.putExtra("coinSymbol", topGain.sym);
+                intent.putExtra("currency", currency);
+                startActivity(intent);
+            }
+        });
 
         str = topLoss.ID+"-" + topLoss.sym.toLowerCase();
         TextView coinNB = findViewById(R.id.coinNameB);
         TextView coinVB = findViewById(R.id.coinValueB);
+        TextView percentLoss = findViewById(R.id.percentLoss);
         imageView = findViewById(R.id.imageViewB);
         Picasso.get().load(url1+str+url2).placeholder(R.drawable.ic_baseline_image_24).resize(200, 200)
                 .centerCrop().into(imageView);
-        coinNB.setText(topLoss.sym); coinVB.setText("$" + topLoss.value);
+        String losspercent = String.valueOf(0 - Math.round(topLoss.percent*100.0)/100.0);
+        coinNB.setText(topLoss.sym); coinVB.setText("$" + topLoss.value); percentLoss.setText("▼ " + losspercent + "%");
+        CardView cB = findViewById(R.id.cardloss);
+        cB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), RedirectionPage.class);
+                intent.putExtra("coin", topLoss.ID);
+                intent.putExtra("currencySym", currencySym);
+                intent.putExtra("coinSymbol", topLoss.sym);
+                intent.putExtra("currency", currency);
+                startActivity(intent);
+            }
+        });
 
         TextView coinN1 = findViewById(R.id.coinName1);
         TextView coinV1 = findViewById(R.id.coinValue1);
@@ -105,6 +135,18 @@ public class MainActivity extends AppCompatActivity {
         Picasso.get().load(url1+url3[0]+url2).placeholder(R.drawable.ic_baseline_image_24).resize(170, 170)
                 .centerCrop().into(imageView);
         coinN1.setText(a.get(0).sym); coinV1.setText("$" + a.get(0).value);
+        CardView c1 = findViewById(R.id.card1);
+        c1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), RedirectionPage.class);
+                intent.putExtra("coin", a.get(0).ID);
+                intent.putExtra("currencySym", currencySym);
+                intent.putExtra("coinSymbol", a.get(0).sym);
+                intent.putExtra("currency", currency);
+                startActivity(intent);
+            }
+        });
 
         TextView coinN2 = findViewById(R.id.coinName2);
         TextView coinV2 = findViewById(R.id.coinValue2);
@@ -112,7 +154,18 @@ public class MainActivity extends AppCompatActivity {
         Picasso.get().load(url1+url3[1]+url2).placeholder(R.drawable.ic_baseline_image_24).resize(170, 170)
                 .centerCrop().into(imageView);
         coinN2.setText(a.get(1).sym); coinV2.setText("$" + a.get(1).value);
-
+        CardView c2 = findViewById(R.id.card2);
+        c2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), RedirectionPage.class);
+                intent.putExtra("coin", a.get(1).ID);
+                intent.putExtra("currencySym", currencySym);
+                intent.putExtra("coinSymbol", a.get(1).sym);
+                intent.putExtra("currency", currency);
+                startActivity(intent);
+            }
+        });
 
         TextView coinN3 = findViewById(R.id.coinName3);
         TextView coinV3 = findViewById(R.id.coinValue3);
@@ -120,6 +173,18 @@ public class MainActivity extends AppCompatActivity {
         Picasso.get().load(url1+url3[2]+url2).placeholder(R.drawable.ic_baseline_image_24).resize(170, 170)
                 .centerCrop().into(imageView);
         coinN3.setText(a.get(2).sym); coinV3.setText("$" + a.get(2).value);
+        CardView c3 = findViewById(R.id.card3);
+        c3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), RedirectionPage.class);
+                intent.putExtra("coin", a.get(2).ID);
+                intent.putExtra("currencySym", currencySym);
+                intent.putExtra("coinSymbol", a.get(2).sym);
+                intent.putExtra("currency", currency);
+                startActivity(intent);
+            }
+        });
 
         TextView coinN4 = findViewById(R.id.coinName4);
         TextView coinV4 = findViewById(R.id.coinValue4);
@@ -127,6 +192,18 @@ public class MainActivity extends AppCompatActivity {
         Picasso.get().load(url1+url3[3]+url2).placeholder(R.drawable.ic_baseline_image_24).resize(170, 170)
                 .centerCrop().into(imageView);
         coinN4.setText(a.get(3).sym); coinV4.setText("$" + a.get(3).value);
+        CardView c4 = findViewById(R.id.card4);
+        c4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), RedirectionPage.class);
+                intent.putExtra("coin", a.get(3).ID);
+                intent.putExtra("currencySym", currencySym);
+                intent.putExtra("coinSymbol", a.get(3).sym);
+                intent.putExtra("currency", currency);
+                startActivity(intent);
+            }
+        });
 
         TextView coinN5 = findViewById(R.id.coinName5);
         TextView coinV5 = findViewById(R.id.coinValue5);
@@ -134,6 +211,18 @@ public class MainActivity extends AppCompatActivity {
         Picasso.get().load(url1+url3[4]+url2).placeholder(R.drawable.ic_baseline_image_24).resize(170, 170)
                 .centerCrop().into(imageView);
         coinN5.setText(a.get(4).sym); coinV5.setText("$" + a.get(4).value);
+        CardView c5 = findViewById(R.id.card5);
+        c5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), RedirectionPage.class);
+                intent.putExtra("coin", a.get(4).ID);
+                intent.putExtra("currencySym", currencySym);
+                intent.putExtra("coinSymbol", a.get(4).sym);
+                intent.putExtra("currency", currency);
+                startActivity(intent);
+            }
+        });
 
         bottom_navigation = findViewById(R.id.bottom_navigation);
         bottom_navigation.setSelectedItemId(R.id.page_2);
