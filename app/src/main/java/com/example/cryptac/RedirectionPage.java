@@ -66,8 +66,11 @@ public class RedirectionPage extends AppCompatActivity {
         String url = "https://api.coincap.io/v2/assets/"+coin+"/history?interval=d1";
         co.setText(coinSymbol);
         curr.setText(currencySym);
-        getEqualUSD();
-        while(val==0);
+        try {
+            getEqualUSD();
+            Thread.sleep(300);
+        }catch(Exception e){
+        }
         OkHttpClient client = new OkHttpClient().newBuilder().build();
         Request request = new Request.Builder().url(url).build();
         client.newCall(request).enqueue(new Callback() {

@@ -1,14 +1,17 @@
 package com.example.cryptac;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,12 +19,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Formatter;
 import java.util.List;
 
 import okhttp3.Call;
@@ -71,7 +76,7 @@ public class CalculateActivity extends AppCompatActivity{
         coins.add(0, "");
         coinSymbols.add(0, "Search Cryptocurrencies");
         currency.add(0, "");
-        currencySymbols.add(0, "Search currencies");
+        currencySymbols.add(0, "Search Currencies");
 
         searchableSpinner1 = findViewById(R.id.spinner1);
         ArrayAdapter<String> sp1ArrayAdapter = new ArrayAdapter<String>(
@@ -82,7 +87,7 @@ public class CalculateActivity extends AppCompatActivity{
         searchableSpinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                if(pos != 0){
+                if(pos >= 0){
                     setCoinSym = coinSymbols.get(pos);
                     setCoin = coins.get(pos);
                 }
@@ -104,7 +109,7 @@ public class CalculateActivity extends AppCompatActivity{
         searchableSpinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long l) {
-                if(pos != 0){
+                if(pos >= 0){
                     setCurrencySym = currencySymbols.get(pos);
                     setCurrency = currency.get(pos);
                 }
@@ -120,10 +125,23 @@ public class CalculateActivity extends AppCompatActivity{
         Nextbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideKeyboard((Button)view);
                 value = findViewById(R.id.num);
+                if(value.getText().toString().trim().length() == 0){
+                    Toast.makeText(CalculateActivity.this, "Enter Valid Inputs", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 double number = Double.parseDouble(String.valueOf(value.getText()));
+                if(setCoinSym.equals("Search Cryptocurrencies") || setCurrencySym.equals("Search Currencies") || number < 0){
+                    Toast.makeText(CalculateActivity.this, "Enter Valid Inputs", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 String url = "https://api.coincap.io/v2/assets/"+setCoin;
-                getEqualUSD();
+                try {
+                    getEqualUSD();
+                    Thread.sleep(300);
+                }catch(Exception e){
+                }
                 OkHttpClient client = new OkHttpClient().newBuilder().build();
                 Request request = new Request.Builder().url(url).build();
                 client.newCall(request).enqueue(new Callback() {
@@ -141,7 +159,7 @@ public class CalculateActivity extends AppCompatActivity{
                             try {
                                 obj = new JSONObject(myResponse);
                                 JSONObject myData = obj.getJSONObject("data");
-                                Double price = Double.parseDouble(myData.getString("rateUsd"));
+                                Double price = Double.parseDouble(myData.getString("priceUsd"));
                                 point = number * (price/val);
 
                             } catch (JSONException e) {
@@ -151,7 +169,9 @@ public class CalculateActivity extends AppCompatActivity{
                                 @Override
                                 public void run() {
                                     txt = findViewById(R.id.txt);
-                                    txt.setText("The current value of "+ number + " "+ setCoinSym + " is "+ setCurrencySym + point);
+                                    Formatter formatter = new Formatter();
+                                    formatter.format("%.2f", point);
+                                    txt.setText("The current value of "+ number + " "+ setCoinSym + " is "+ setCurrencySym+"  " + formatter.toString());
                                 }
                             });
                         }
@@ -199,6 +219,7 @@ public class CalculateActivity extends AppCompatActivity{
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful()) {
+
                     final String myResponse = response.body().string();
                     JSONObject obj = null;
                     try {
@@ -212,5 +233,13 @@ public class CalculateActivity extends AppCompatActivity{
                 }
             }
         });
+    }
+
+    public void hideKeyboard(View view) {
+        try {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        } catch(Exception ignored) {
+        }
     }
 }

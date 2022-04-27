@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
@@ -55,7 +56,7 @@ public class CurrentTrendsActivity extends AppCompatActivity{
         coins.add(0, "");
         coinSymbols.add(0, "Search Cryptocurrencies");
         currency.add(0, "");
-        currencySymbols.add(0, "Search currencies");
+        currencySymbols.add(0, "Search Currencies");
 
         searchableSpinner1 = findViewById(R.id.spinner1);
         ArrayAdapter<String> sp1ArrayAdapter = new ArrayAdapter<String>(
@@ -66,7 +67,7 @@ public class CurrentTrendsActivity extends AppCompatActivity{
         searchableSpinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                if(pos != 0){
+                if(pos >= 0){
                     setCoinSym = coinSymbols.get(pos);
                     setCoin = coins.get(pos);
                 }
@@ -88,7 +89,7 @@ public class CurrentTrendsActivity extends AppCompatActivity{
         searchableSpinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long l) {
-                if(pos != 0){
+                if(pos >= 0){
                     setCurrencySym = currencySymbols.get(pos);
                     setCurrency = currency.get(pos);
                 }
@@ -105,6 +106,10 @@ public class CurrentTrendsActivity extends AppCompatActivity{
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(setCoinSym.equals("Search Cryptocurrencies") || setCurrencySym.equals("Search Currencies")){
+                    Toast.makeText(CurrentTrendsActivity.this, "Enter All Inputs", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Intent intent = new Intent(getApplicationContext(), RedirectionPage.class);
                 intent.putExtra("coin",setCoin);
                 intent.putExtra("currencySym", setCurrencySym);
