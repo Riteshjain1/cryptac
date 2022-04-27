@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -38,6 +39,7 @@ public class RedirectionPage extends AppCompatActivity {
     String currency = "";
     float val = 0;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,12 +60,14 @@ public class RedirectionPage extends AppCompatActivity {
         txt = findViewById(R.id.txt);
 
         String coin = intent.getStringExtra("coin");
-        currency = intent.getStringExtra("currency");
+        String currencySym = intent.getStringExtra("currencySym");
         String coinSymbol = intent.getStringExtra("coinSymbol");
+        currency = intent.getStringExtra("currency");
         String url = "https://api.coincap.io/v2/assets/"+coin+"/history?interval=d1";
         co.setText(coinSymbol);
-        curr.setText(currency);
+        curr.setText(currencySym);
         getEqualUSD();
+        while(val==0);
         OkHttpClient client = new OkHttpClient().newBuilder().build();
         Request request = new Request.Builder().url(url).build();
         client.newCall(request).enqueue(new Callback() {
@@ -82,17 +86,17 @@ public class RedirectionPage extends AppCompatActivity {
                         obj = new JSONObject(myResponse);
                         JSONArray arr = obj.getJSONArray("data");
 
+                        for(int i = 0; i < arr.length(); i++){
+                            String  price = arr.getJSONObject(i).getString("priceUsd");
+                            points[i] = Float.parseFloat(price)/val;
+                        }
+
                         RedirectionPage.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
 
                             }
                         });
-
-                        for(int i = 0; i < arr.length(); i++){
-                            String  price = arr.getJSONObject(i).getString("priceUsd");
-                            points[i] = Float.parseFloat(price)/val;
-                        }
 
                         txt.setText("Current value is: "+String.valueOf(points[arr.length()-1]));
                         graphView = findViewById(R.id.idGraphView);
@@ -120,10 +124,11 @@ public class RedirectionPage extends AppCompatActivity {
 
     }
     public void getEqualUSD(){
+        String url = "https://api.coincap.io/v2/rates/"+currency;
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         Request request = new Request.Builder()
-                .url("https://api.coincap.io/v2/rates")
+                .url(url)
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -139,15 +144,8 @@ public class RedirectionPage extends AppCompatActivity {
                     JSONObject obj = null;
                     try {
                         obj = new JSONObject(myResponse);
-                        JSONArray arr = obj.getJSONArray("data");
-                        int i;
-                        for(i = 0; i<arr.length(); i++){
-                            String cur_sym = arr.getJSONObject(i).getString("symbol");
-                            if(cur_sym.equals(currency)){
-                                val = Float.parseFloat(arr.getJSONObject(i).getString("rateUsd"));
-                                break;
-                            }
-                        }
+                        JSONObject myData = obj.getJSONObject("data");
+                        val = Float.parseFloat(myData.getString("rateUsd"));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

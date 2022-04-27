@@ -41,6 +41,7 @@ public class SettingsActivity extends AppCompatActivity {
                 editor.apply();
                 Intent intent = new Intent(getApplicationContext(), SendOTPActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -63,10 +64,12 @@ public class SettingsActivity extends AppCompatActivity {
                     case R.id.page_1:
                         startActivity(new Intent(getApplicationContext(), CalculateActivity.class));
                         overridePendingTransition(0,0);
+                        finish();
                         return true;
                     case R.id.page_2:
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         overridePendingTransition(0,0);
+                        finish();
                         return true;
                     case R.id.page_3:
                         return true;
